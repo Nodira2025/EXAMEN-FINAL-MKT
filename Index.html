@@ -204,6 +204,7 @@
             <li><i class="fas fa-check"></i> 60 consignas seleccionadas.</li>
             <li><i class="fas fa-clock"></i> 45 segundos por consigna.</li>
             <li><i class="fas fa-lock"></i> Un solo intento permitido.</li>
+            <li><i class="fas fa-random"></i> Preguntas y respuestas en orden aleatorio.</li>
         </ul>
 
         <button class="btn" onclick="startQuiz()">COMENZAR EXAMEN</button>
@@ -339,6 +340,31 @@
         {"q": "Mucho alcance pero poco interés puede indicar que:", "o": ["El contenido llama la atención, pero no atrae al público correcto o no conecta con una necesidad real", "La fidelización es perfecta", "El proceso de compra es demasiado corto", "Hay demasiadas recompras"], "a": 0, "e": "Mucho alcance con poco interés puede señalar público incorrecto o falta de conexión con una necesidad.", "i": "fa-triangle-exclamation"},
     ];
 
+
+    function shuffleArray(arr) {
+        const copy = [...arr];
+        for (let i = copy.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+    }
+
+    function prepareQuestion(q) {
+        const mixed = q.o.map((text, index) => ({
+            text,
+            isCorrect: index === q.a
+        }));
+
+        const shuffledOptions = shuffleArray(mixed);
+
+        return {
+            ...q,
+            o: shuffledOptions.map(item => item.text),
+            a: shuffledOptions.findIndex(item => item.isCorrect)
+        };
+    }
+
     const motivations = [
         { t: "¡Sigue así! El éxito es la suma de pequeños esfuerzos.", i: "https://images.unsplash.com/photo-1494178270175-e96de2971df9?auto=format&fit=crop&w=500&q=60" },
         { t: "No te rindas, estás progresando.", i: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=500&q=60" },
@@ -347,7 +373,7 @@
         { t: "Cada error es una lección aprendida.", i: "https://images.unsplash.com/photo-1456406644174-8ddd4cd52a06?auto=format&fit=crop&w=500&q=60" }
     ];
 
-    let questions = db.sort(() => Math.random() - 0.5).slice(0, TOTAL_QUESTIONS);
+    let questions = shuffleArray(db).slice(0, TOTAL_QUESTIONS).map(prepareQuestion);
     
     let currentIdx = 0;
     let score = 0;
