@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen Marketing Digital - Embudo de Ventas - Instituto NOA</title>
+    <!-- Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fuente -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #ff6600; /* Naranja NOA */
+            --primary-dark: #d35400;
+            --secondary-color: #c0392b; /* Rojo */
+            --accent-color: #27ae60; /* Verde */
+            --bg-color: #fff5e6;
+            --text-color: #333;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            /* SEGURIDAD: NO SELECCIONAR TEXTO */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 102, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 10px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        
+        /* LOGO ESTILOS */
+        .logo-area { 
+            font-weight: 900; 
+            font-size: 1.2rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            text-transform: uppercase; 
+        }
+        
+        .logo-img {
+            height: 50px;
+            width: auto;
+            background: white;
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .timer-badge {
+            background: white; color: var(--primary-color);
+            padding: 5px 15px; border-radius: 20px;
+            font-weight: bold; font-size: 1.2rem;
+            display: flex; align-items: center; gap: 5px;
+            border: 2px solid #fff;
+        }
+
+        .btn-finish-early {
+            background: #c0392b; color: white; border: none;
+            padding: 8px 12px; border-radius: 5px; font-size: 0.8rem;
+            cursor: pointer; margin-left: 10px;
+        }
+
+        .progress-container { background-color: #eee; height: 8px; width: 100%; }
+        .progress-bar { background-color: var(--accent-color); height: 100%; width: 0%; transition: width 0.3s ease; }
+
+        /* SCREENS */
+        .screen {
+            padding: 25px; flex: 1; display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; animation: fadeIn 0.4s;
+        }
+        .screen.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .intro-icon { font-size: 5rem; color: var(--primary-color); margin-bottom: 20px; }
+        
+        .btn {
+            background-color: var(--primary-color); color: white; border: none;
+            padding: 15px 40px; border-radius: 50px; font-size: 1.1rem;
+            font-weight: bold; cursor: pointer; transition: transform 0.2s;
+            margin-top: 20px; text-decoration: none; display: inline-block;
+            box-shadow: 0 4px 0 #bf360c;
+        }
+        .btn:hover { transform: translateY(-2px); background: var(--primary-dark); }
+        .btn:active { transform: translateY(2px); box-shadow: none; }
+        .btn-whatsapp { background-color: #25D366; box-shadow: 0 4px 0 #1e994a; width: 100%; margin-top: 15px; }
+
+        /* GAME AREA */
+        .stats-bar { display: flex; justify-content: space-between; width: 100%; margin-bottom: 15px; font-weight: bold; color: #7f8c8d; }
+        
+        .lifelines-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
+        .lifeline-btn {
+            background: white; border: 2px solid var(--primary-color); color: var(--primary-color);
+            width: 55px; height: 55px; border-radius: 50%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; position: relative; font-size: 0.7rem; font-weight: bold;
+        }
+        .lifeline-btn:disabled { border-color: #ccc; color: #ccc; opacity: 0.5; cursor: not-allowed; }
+        .badge-count { position: absolute; top: -5px; right: -5px; background: var(--secondary-color); color: white; width: 20px; height: 20px; border-radius: 50%; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; }
+
+        .question-image {
+            width: 100%; height: 140px; border-radius: 10px; margin-bottom: 15px;
+            background-color: #fff3e0; display: flex; align-items: center; justify-content: center;
+            font-size: 4rem; color: #ffcc80; border: 2px dashed #ffb74d;
+        }
+        .question-text { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: #444; min-height: 50px; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+        @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
+
+        .option-btn {
+            background: white; border: 2px solid #ddd; padding: 12px; border-radius: 8px;
+            cursor: pointer; font-size: 1rem; text-align: left; position: relative; color: #555; font-weight: 500;
+        }
+        .option-btn:hover:not(:disabled) { border-color: var(--primary-color); background: #fff8f0; }
+        .option-btn.correct { background: var(--accent-color); color: white; border-color: var(--accent-color); }
+        .option-btn.incorrect { background: var(--secondary-color); color: white; border-color: var(--secondary-color); }
+        .option-btn.hidden { opacity: 0; pointer-events: none; }
+
+        /* OVERLAYS */
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92); display: none; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 900; padding: 20px;
+            color: white; text-align: center; backdrop-filter: blur(5px);
+        }
+
+        /* MOTIVATION CARD */
+        .motivation-card {
+            background: white; color: #333; border-radius: 15px; max-width: 400px;
+            overflow: hidden; box-shadow: 0 10px 30px rgba(255,255,255,0.2); animation: popIn 0.5s;
+        }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .motivation-img { width: 100%; height: 200px; object-fit: cover; }
+        .motivation-content { padding: 20px; }
+        .motivation-quote { font-style: italic; font-size: 1.1rem; margin-bottom: 10px; color: var(--primary-color); font-weight: bold; }
+
+        /* RESULT FORM */
+        .student-form { width: 100%; background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 15px 0; text-align: left; border: 1px solid #ddd; }
+        .form-input { width: 100%; padding: 8px; margin-top: 5px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .review-list { width: 100%; text-align: left; max-height: 150px; overflow-y: auto; margin-top: 15px; border: 1px solid #ddd; padding: 10px; background: #fff; font-size: 0.8rem; }
+        .alert-box { background: #ffebee; color: #c62828; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 0.9rem; border: 1px solid #ef9a9a; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+<div class="container">
+    <header>
+        <div class="logo-area">
+            <img src="https://institutonoa.com.ar/wp-content/uploads/2021/09/cropped-cropped-Logo-Covid-NOA-140x79-1-126x71.png" alt="Logo Instituto NOA" class="logo-img">
+            INSTITUTO NOA
+        </div>
+        <div style="display:flex; align-items:center;">
+            <div class="timer-badge" id="timerBadge" style="display:none;">
+                <i class="fas fa-stopwatch"></i> <span id="timer">45</span>
+            </div>
+            <button class="btn-finish-early" id="finishBtn" onclick="confirmFinish()" style="display:none;">
+                <i class="fas fa-flag"></i> Fin
+            </button>
+        </div>
+    </header>
+    <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+
+    <!-- PANTALLA INICIO -->
+    <div id="startScreen" class="screen active">
+        <div class="intro-icon"><i class="fas fa-user-shield"></i></div>
+        <h1 style="color:var(--primary-color)">Examen Marketing Digital - Embudo de Ventas</h1>
+        
+        <ul style="font-size: 0.9rem; color: #666; margin: 20px 0; list-style: none;">
+            <li><i class="fas fa-check"></i> 60 consignas seleccionadas.</li>
+            <li><i class="fas fa-clock"></i> 45 segundos por consigna.</li>
+            <li><i class="fas fa-lock"></i> Un solo intento permitido.</li>
+        </ul>
+
+        <button class="btn" onclick="startQuiz()">COMENZAR EXAMEN</button>
+    </div>
+
+    <!-- PANTALLA JUEGO -->
+    <div id="gameScreen" class="screen">
+        <div class="stats-bar">
+            <span id="qCount">1/60</span>
+            <span id="sCount">Aciertos: 0</span>
+        </div>
+        <div class="lifelines-container">
+            <button class="lifeline-btn" id="btnFifty" onclick="useFifty()"><div class="badge-count" id="c50">3</div><i class="fas fa-adjust"></i> 50:50</button>
+            <button class="lifeline-btn" id="btnTime" onclick="useTime()"><div class="badge-count" id="cTime">4</div><i class="fas fa-clock"></i> +15s</button>
+            <button class="lifeline-btn" id="btnSkip" onclick="useSkip()"><div class="badge-count" id="cSkip">1</div><i class="fas fa-gift"></i> Skip</button>
+        </div>
+        <div class="question-image" id="qImage"></div>
+        <div class="question-text" id="qText"></div>
+        <div class="options-grid" id="optContainer"></div>
+    </div>
+
+    <!-- OVERLAYS -->
+    <div id="feedbackOverlay" class="overlay">
+        <div id="fbIcon" style="font-size: 4rem; margin-bottom: 15px;"></div>
+        <h2 id="fbTitle" style="margin-bottom: 10px;"></h2>
+        <p id="fbText" style="margin-bottom: 25px; font-size: 1.1rem; line-height: 1.4;"></p>
+        <button class="btn" id="nextBtn" style="background:white; color:var(--primary-color); box-shadow:none;">CONTINUAR <i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <div id="motivationOverlay" class="overlay" style="background: rgba(0,0,0,0.85);">
+        <div class="motivation-card">
+            <img src="" id="motImg" class="motivation-img" alt="Motivación">
+            <div class="motivation-content">
+                <div class="motivation-quote" id="motQuote"></div>
+                <p style="font-size: 0.9rem; color: #666;">¡Vamos! Estás haciendo un gran trabajo.</p>
+                <button class="btn" onclick="closeMotivation()" style="padding: 10px 30px; margin-top: 15px; font-size: 0.9rem;">CONTINUAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESULTADOS -->
+    <div id="resultScreen" class="screen">
+        <h2 style="color: #666;">Examen Finalizado</h2>
+        <div class="alert-box" id="cheatAlert" style="display:none;">
+            <i class="fas fa-user-lock"></i> Intento de reingreso bloqueado. Resultado anterior:
+        </div>
+        <div id="rankBadge" style="background:gray; color:white; padding:5px 15px; border-radius:15px; font-weight:bold; margin:10px 0;">NIVEL</div>
+        <div class="result-score" id="finalScore">0/60</div>
+        <p id="motivationalMsg">Mensaje</p>
+
+        <div class="student-form">
+            <h4 style="border-bottom:1px solid #ddd; padding-bottom:5px; margin-bottom:10px; color:var(--primary-color);">
+                <i class="fas fa-paper-plane"></i> Enviar al Profesor
+            </h4>
+            <label>Nombre:</label><input type="text" id="inputName" class="form-input" placeholder="Tu nombre">
+            <label>DNI:</label><input type="number" id="inputDNI" class="form-input" placeholder="Tu DNI">
+            <label>Comisión:</label><input type="text" id="inputCourse" class="form-input" placeholder="Ej: Martes 18hs">
+            <div style="font-size: 0.8rem; color: #888; margin-top:5px;">Código: <span id="valCode" style="font-family:monospace; font-weight:bold;">---</span></div>
+        </div>
+
+        <a href="#" id="whatsappBtn" class="btn btn-whatsapp" onclick="return validateAndSend()">
+            <i class="fab fa-whatsapp"></i> ENVIAR AL WHATSAPP (3812234142)
+        </a>
+        <div class="review-list" id="reviewList"></div>
+    </div>
+</div>
+
+<script>
+    const TIME_PER_QUESTION = 45;
+    const PASS_SCORE = 36;
+    const TOTAL_QUESTIONS = 60;
+    
+    const db = [
+        {"q": "¿Qué representa un embudo de ventas?", "o": ["El recorrido de una persona desde que descubre una marca hasta que realiza una acción valiosa", "Solo el momento de la compra", "Una lista de precios", "Un calendario de publicaciones"], "a": 0, "e": "El embudo representa el recorrido desde el descubrimiento de la marca hasta una acción valiosa.", "i": "fa-filter"},
+        {"q": "¿Por qué se llama 'embudo' de ventas?", "o": ["Porque muchas personas entran arriba y solo una parte avanza hasta convertirse en cliente", "Porque todos compran al mismo tiempo", "Porque sirve únicamente para redes sociales", "Porque elimina etapas del proceso"], "a": 0, "e": "Se llama embudo porque muchas personas entran al inicio y una proporción menor llega al final.", "i": "fa-filter"},
+        {"q": "Según el material, el embudo de ventas sirve principalmente para:", "o": ["Entender qué necesita saber una persona en cada momento para avanzar con confianza", "Presionar a la gente para comprar", "Publicar más contenido sin estrategia", "Medir solamente likes"], "a": 0, "e": "La idea clave es acompañar y entender necesidades, no presionar.", "i": "fa-user-check"},
+        {"q": "¿Cuál es la primera etapa del embudo?", "o": ["Atracción", "Interés", "Conversión", "Fidelización"], "a": 0, "e": "La primera etapa es Atracción: 'Me descubre'.", "i": "fa-magnet"},
+        {"q": "¿Cuál es el objetivo principal de la etapa de Atracción?", "o": ["Lograr un primer contacto con personas que todavía no conocen la marca", "Cerrar la venta inmediatamente", "Pedir todos los datos del cliente", "Resolver reclamos posventa"], "a": 0, "e": "Atracción busca llegar a personas nuevas y generar un primer contacto.", "i": "fa-bullhorn"},
+        {"q": "¿Cuál de estos es un ejemplo de contenido de Atracción?", "o": ["Un reel educativo", "Un formulario de pago", "Una encuesta de satisfacción posventa", "Un programa de referidos"], "a": 0, "e": "Los reels educativos son un ejemplo de contenido para captar atención inicial.", "i": "fa-video"},
+        {"q": "¿Qué pregunta se hace una persona en la etapa de Atracción?", "o": ["¿Qué es esto y por qué debería prestarle atención?", "¿Cómo pago ahora?", "¿Volvería a comprar?", "¿Qué soporte posventa tengo?"], "a": 0, "e": "En Atracción la persona intenta entender qué es y por qué debería interesarle.", "i": "fa-circle-question"},
+        {"q": "¿Cuál es la segunda etapa del embudo?", "o": ["Interés", "Conversión", "Fidelización", "Atracción"], "a": 0, "e": "Después de Atracción viene Interés: 'Quiero saber más'.", "i": "fa-eye"},
+        {"q": "¿Qué busca la etapa de Interés?", "o": ["Transformar la atención inicial en curiosidad real", "Lograr una recompra inmediata", "Eliminar todos los precios", "Cerrar el sitio web"], "a": 0, "e": "Interés busca que la persona quiera profundizar y saber más.", "i": "fa-lightbulb"},
+        {"q": "¿Cuál de estas acciones corresponde a Interés?", "o": ["Visitar el perfil y mirar varios videos", "Completar una compra", "Recomendar a un amigo después de usar el producto", "Solicitar un reembolso"], "a": 0, "e": "Visitar el perfil, mirar contenido y guardar publicaciones son señales de interés.", "i": "fa-user-plus"},
+        {"q": "¿Qué pregunta se hace la persona en la etapa de Interés?", "o": ["¿Esto puede servirme a mí?", "¿Cómo dejo una reseña?", "¿Dónde reclamo una devolución?", "¿Cuántos clientes ya recompraron?"], "a": 0, "e": "En Interés la persona evalúa si la propuesta puede ser relevante para ella.", "i": "fa-circle-question"},
+        {"q": "¿Cuál es la tercera etapa del embudo?", "o": ["Consideración", "Fidelización", "Atracción", "Interés"], "a": 0, "e": "La tercera etapa es Consideración: 'Estoy evaluando'.", "i": "fa-scale-balanced"},
+        {"q": "¿Qué busca la etapa de Consideración?", "o": ["Ayudar a comparar, resolver dudas y reducir el riesgo percibido", "Llamar la atención de desconocidos", "Fidelizar después de la compra", "Medir solo visualizaciones"], "a": 0, "e": "Consideración ayuda a comparar opciones y reducir incertidumbre.", "i": "fa-scale-balanced"},
+        {"q": "¿Cuál de estos contenidos es propio de Consideración?", "o": ["Testimonios y preguntas frecuentes", "Memes sin relación", "Solo un logo", "Un saludo genérico"], "a": 0, "e": "Testimonios, FAQs, casos, precios y demostraciones ayudan a evaluar.", "i": "fa-comments"},
+        {"q": "¿Qué pregunta se hace la persona en Consideración?", "o": ["¿Por qué elegir esta opción y no otra?", "¿Qué es esta marca?", "¿Cómo vuelvo a comprar?", "¿Qué reel debería publicar la empresa?"], "a": 0, "e": "En Consideración la persona compara alternativas y busca reducir riesgo.", "i": "fa-circle-question"},
+        {"q": "¿Cuál es la cuarta etapa del embudo?", "o": ["Conversión", "Atracción", "Interés", "Fidelización"], "a": 0, "e": "La cuarta etapa es Conversión: 'Voy a actuar'.", "i": "fa-cart-shopping"},
+        {"q": "¿Cuál es el objetivo de la Conversión?", "o": ["Facilitar la decisión y eliminar fricción", "Conseguir seguidores sin intención", "Hablar únicamente de la empresa", "Aumentar la cantidad de pasos"], "a": 0, "e": "Conversión busca que actuar sea simple y claro.", "i": "fa-check"},
+        {"q": "¿Cuál de estas acciones es una Conversión?", "o": ["Reservar un turno", "Mirar un reel sin interactuar", "Ver el logo por primera vez", "Leer una publicación sin intención"], "a": 0, "e": "Reservar, comprar, inscribirse o pedir presupuesto son acciones de conversión.", "i": "fa-calendar-check"},
+        {"q": "¿Qué pregunta se hace la persona en Conversión?", "o": ["¿Cómo lo hago y qué pasa después?", "¿Quién es esta marca?", "¿Me interesa este tema?", "¿Qué opinan mis amigos del reel?"], "a": 0, "e": "En Conversión la persona necesita claridad sobre cómo actuar y qué ocurrirá después.", "i": "fa-circle-question"},
+        {"q": "¿Cuál es la quinta etapa del embudo?", "o": ["Fidelización", "Atracción", "Consideración", "Conversión"], "a": 0, "e": "La quinta etapa es Fidelización: 'Quiero volver'.", "i": "fa-heart"},
+        {"q": "¿Qué busca la Fidelización?", "o": ["Que el cliente tenga una buena experiencia, vuelva y recomiende", "Que descubra la marca por primera vez", "Que compare precios antes de comprar", "Que vea un anuncio sin interactuar"], "a": 0, "e": "Fidelización apunta a satisfacción, recompra y recomendación.", "i": "fa-heart"},
+        {"q": "¿Cuál de estas acciones corresponde a Fidelización?", "o": ["Seguimiento y soporte posventa", "Mostrar un anuncio a desconocidos", "Ocultar información del producto", "Pedir todos los datos antes del interés"], "a": 0, "e": "Soporte, seguimiento, comunidad y beneficios son acciones de fidelización.", "i": "fa-headset"},
+        {"q": "¿Qué pregunta se hace la persona en Fidelización?", "o": ["¿Valió la pena? ¿Volvería o lo recomendaría?", "¿Qué es esto?", "¿Dónde está el anuncio?", "¿Cómo descubro esta marca?"], "a": 0, "e": "Fidelización evalúa la experiencia y la intención de volver o recomendar.", "i": "fa-circle-question"},
+        {"q": "¿Por qué un mismo mensaje no sirve para todas las etapas?", "o": ["Porque cada etapa tiene necesidades y preguntas diferentes", "Porque el logo cambia en cada etapa", "Porque las redes sociales no permiten repetir mensajes", "Porque solo importa la etapa de conversión"], "a": 0, "e": "El mensaje debe adaptarse a lo que la persona necesita saber en cada momento.", "i": "fa-message"},
+        {"q": "Intentar vender directamente a una persona que recién conoce la marca es:", "o": ["Un error frecuente", "La única estrategia válida", "Siempre lo más eficiente", "Una acción de fidelización"], "a": 0, "e": "El material señala como error común vender directamente a quien recién descubre la marca.", "i": "fa-triangle-exclamation"},
+        {"q": "En Atracción, ¿qué necesita principalmente la persona?", "o": ["Descubrir algo relevante", "Comparar precios detallados", "Recibir soporte posventa", "Completar un formulario largo"], "a": 0, "e": "Atracción debe ofrecer algo relevante que genere descubrimiento.", "i": "fa-magnet"},
+        {"q": "En Interés, ¿qué necesita principalmente la persona?", "o": ["Entender si le sirve", "Recomendar a otros", "Firmar un contrato inmediatamente", "Resolver una devolución"], "a": 0, "e": "Interés busca que la persona comprenda si la propuesta puede servirle.", "i": "fa-eye"},
+        {"q": "En Consideración, ¿qué necesita principalmente la persona?", "o": ["Comparar y resolver dudas", "Ver contenido genérico sin información", "Dar una recomendación posventa", "Descubrir la marca por primera vez"], "a": 0, "e": "Consideración se centra en comparar y despejar dudas.", "i": "fa-scale-balanced"},
+        {"q": "En Conversión, ¿qué necesita principalmente la persona?", "o": ["Poder actuar fácilmente", "Ver más publicaciones sin CTA", "Aprender qué es la marca", "Recibir un programa de referidos"], "a": 0, "e": "Conversión busca que la acción sea simple y sin fricción.", "i": "fa-arrow-pointer"},
+        {"q": "En Fidelización, ¿qué necesita principalmente la persona?", "o": ["Sentir que eligió bien", "Descubrir un tema por primera vez", "Comparar competidores", "Entrar por primera vez al perfil"], "a": 0, "e": "Una buena experiencia refuerza la elección y favorece recompra y recomendación.", "i": "fa-face-smile"},
+        {"q": "¿Qué significa CTA?", "o": ["Llamada a la acción", "Costo total anual", "Contenido técnico automático", "Cliente total activo"], "a": 0, "e": "CTA significa llamada a la acción.", "i": "fa-bullseye"},
+        {"q": "¿Cuál es un CTA apropiado para Atracción?", "o": ["Ver / conocer / descubrir", "Comprar ya obligatoriamente", "Completar 20 campos", "Dejar una reseña posventa"], "a": 0, "e": "En Atracción, CTAs suaves como ver, conocer o descubrir son adecuados.", "i": "fa-arrow-right"},
+        {"q": "¿Cuál es un CTA apropiado para Interés?", "o": ["Seguir / guardar / visitar", "Recomprar / recomendar", "Cancelar / devolver", "Bloquear / salir"], "a": 0, "e": "En Interés, acciones como seguir, guardar o visitar ayudan a profundizar.", "i": "fa-bookmark"},
+        {"q": "¿Cuál es un CTA apropiado para Consideración?", "o": ["Consultar / comparar / pedir información", "Ignorar / salir", "Recomendar sin comprar", "Solo mirar un logo"], "a": 0, "e": "En Consideración conviene facilitar consultas y comparación.", "i": "fa-comments"},
+        {"q": "¿Cuál es un CTA apropiado para Conversión?", "o": ["Comprar / reservar / inscribirse", "Solo seguir la cuenta", "Leer un meme", "Mirar un reel sin acción"], "a": 0, "e": "Conversión pide una acción concreta como comprar, reservar o inscribirse.", "i": "fa-cart-shopping"},
+        {"q": "¿Cuál es un CTA apropiado para Fidelización?", "o": ["Volver / recomendar / valorar", "Descubrir la marca", "Comparar precios por primera vez", "Entrar al perfil por primera vez"], "a": 0, "e": "Fidelización busca retorno, recomendación y valoración.", "i": "fa-star"},
+        {"q": "¿Qué significa TOFU?", "o": ["Top of Funnel", "Total of Users", "Type of Funnel", "Target of User"], "a": 0, "e": "TOFU significa Top of Funnel, la parte superior del embudo.", "i": "fa-filter"},
+        {"q": "¿Qué etapa incluye TOFU según el material?", "o": ["Atracción", "Conversión", "Fidelización", "Consideración solamente"], "a": 0, "e": "TOFU corresponde a Atracción.", "i": "fa-magnet"},
+        {"q": "¿Cuál es el objetivo principal de TOFU?", "o": ["Llegar a nuevas personas", "Cerrar ventas complejas", "Gestionar reclamos", "Lograr recompra"], "a": 0, "e": "TOFU busca alcance y descubrimiento.", "i": "fa-users"},
+        {"q": "¿Qué significa MOFU?", "o": ["Middle of Funnel", "Marketing of Funnel", "Measure of Users", "Main Objective Funnel"], "a": 0, "e": "MOFU significa Middle of Funnel.", "i": "fa-filter"},
+        {"q": "¿Qué etapas incluye MOFU?", "o": ["Interés + Consideración", "Atracción + Fidelización", "Conversión solamente", "Fidelización solamente"], "a": 0, "e": "MOFU agrupa Interés y Consideración.", "i": "fa-layer-group"},
+        {"q": "¿Cuál es el objetivo principal de MOFU?", "o": ["Educar, generar confianza y resolver dudas", "Conseguir solo alcance", "Forzar la compra", "Medir únicamente likes"], "a": 0, "e": "MOFU trabaja educación, confianza y resolución de dudas.", "i": "fa-graduation-cap"},
+        {"q": "¿Qué significa BOFU?", "o": ["Bottom of Funnel", "Brand of Users", "Business of Funnel", "Base of Followers"], "a": 0, "e": "BOFU significa Bottom of Funnel.", "i": "fa-filter"},
+        {"q": "¿Qué etapa incluye BOFU?", "o": ["Conversión", "Atracción", "Interés", "Fidelización"], "a": 0, "e": "BOFU se asocia con Conversión.", "i": "fa-cart-shopping"},
+        {"q": "¿Cuál es el objetivo principal de BOFU?", "o": ["Facilitar la decisión y la acción", "Generar descubrimiento", "Conseguir visualizaciones sin intención", "Crear contenido posventa"], "a": 0, "e": "BOFU busca facilitar la decisión final y la acción.", "i": "fa-check-double"},
+        {"q": "¿Qué ocurre con la Fidelización respecto del embudo?", "o": ["Sucede después de la conversión y puede alimentar un nuevo embudo con recomendaciones y recompras", "Reemplaza Atracción", "Ocurre antes del descubrimiento", "No tiene relación con nuevas ventas"], "a": 0, "e": "La fidelización puede generar recomendaciones y recompras que alimentan nuevos recorridos.", "i": "fa-arrows-rotate"},
+        {"q": "En el ejemplo del curso de diseño digital, ver el video '3 errores al diseñar un flyer' corresponde a:", "o": ["Atracción", "Conversión", "Fidelización", "Consideración"], "a": 0, "e": "Ese video genera el primer contacto y corresponde a Atracción.", "i": "fa-video"},
+        {"q": "En el ejemplo del curso, entrar al perfil y guardar una publicación corresponde a:", "o": ["Interés", "Conversión", "Fidelización", "Atracción"], "a": 0, "e": "Explorar el perfil y guardar contenido son señales de Interés.", "i": "fa-bookmark"},
+        {"q": "En el ejemplo del curso, preguntar horarios, precio y duración corresponde a:", "o": ["Consideración", "Atracción", "Fidelización", "Interés inicial"], "a": 0, "e": "Preguntar detalles y revisar testimonios corresponde a Consideración.", "i": "fa-circle-info"},
+        {"q": "En el ejemplo del curso, reservar el lugar y completar la inscripción corresponde a:", "o": ["Conversión", "Atracción", "Interés", "Fidelización"], "a": 0, "e": "Reservar e inscribirse son acciones concretas de Conversión.", "i": "fa-pen-to-square"},
+        {"q": "En el ejemplo del curso, terminar satisfecho y recomendar a un amigo corresponde a:", "o": ["Fidelización", "Atracción", "Consideración", "Interés"], "a": 0, "e": "Una buena experiencia y recomendación corresponden a Fidelización.", "i": "fa-user-group"},
+        {"q": "¿Qué métrica simple puede observarse en Atracción?", "o": ["Alcance o visualizaciones", "Recompra", "Reservas confirmadas únicamente", "Cantidad de devoluciones"], "a": 0, "e": "En Atracción conviene observar alcance o visualizaciones.", "i": "fa-chart-line"},
+        {"q": "¿Qué métricas pueden observarse en Interés?", "o": ["Visitas, seguidores, guardados y clics", "Solo ventas", "Solo devoluciones", "Solo recomendaciones"], "a": 0, "e": "Las señales de Interés incluyen visitas, seguidores, guardados y clics.", "i": "fa-chart-simple"},
+        {"q": "¿Qué métrica puede observarse en Consideración?", "o": ["Consultas o leads", "Solo alcance", "Solo recompra", "Solo visualizaciones"], "a": 0, "e": "Las consultas o leads son una señal de Consideración.", "i": "fa-user-tag"},
+        {"q": "¿Qué métricas corresponden a Conversión?", "o": ["Ventas, reservas o inscripciones", "Likes solamente", "Seguidores solamente", "Visualizaciones sin acción"], "a": 0, "e": "Conversión se mide con acciones valiosas como ventas, reservas o inscripciones.", "i": "fa-coins"},
+        {"q": "¿Qué métricas corresponden a Fidelización?", "o": ["Recompra, recomendación y satisfacción", "Solo alcance", "Solo clics", "Solo visitas al perfil"], "a": 0, "e": "Fidelización se observa mediante recompra, recomendación y satisfacción.", "i": "fa-heart-circle-check"},
+        {"q": "¿Cuál es la fórmula de tasa de conversión simple?", "o": ["(Personas que realizan la acción / personas que llegaron a esa etapa) × 100", "Likes × seguidores", "Ventas + visitas", "Alcance / publicaciones"], "a": 0, "e": "La tasa de conversión compara quienes realizaron la acción con quienes llegaron a la etapa.", "i": "fa-percent"},
+        {"q": "Si 90 personas consultaron y 18 se inscribieron, ¿cuál es la tasa de conversión?", "o": ["20%", "5%", "50%", "80%"], "a": 0, "e": "18 / 90 × 100 = 20%.", "i": "fa-calculator"},
+        {"q": "Si muchas personas llegan a una etapa pero muy pocas pasan a la siguiente, existe:", "o": ["Una fuga", "Una recompra", "Una automatización", "Una fidelización perfecta"], "a": 0, "e": "El material llama fuga a la pérdida importante entre una etapa y la siguiente.", "i": "fa-droplet"},
+        {"q": "Mucho alcance pero poco interés puede indicar que:", "o": ["El contenido llama la atención, pero no atrae al público correcto o no conecta con una necesidad real", "La fidelización es perfecta", "El proceso de compra es demasiado corto", "Hay demasiadas recompras"], "a": 0, "e": "Mucho alcance con poco interés puede señalar público incorrecto o falta de conexión con una necesidad.", "i": "fa-triangle-exclamation"},
+    ];
+
+    const motivations = [
+        { t: "¡Sigue así! El éxito es la suma de pequeños esfuerzos.", i: "https://images.unsplash.com/photo-1494178270175-e96de2971df9?auto=format&fit=crop&w=500&q=60" },
+        { t: "No te rindas, estás progresando.", i: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=500&q=60" },
+        { t: "Cree en ti mismo y serás imparable.", i: "https://images.unsplash.com/photo-1519834785169-98be25ec3f84?auto=format&fit=crop&w=500&q=60" },
+        { t: "La disciplina es el puente entre metas y logros.", i: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=500&q=60" },
+        { t: "Cada error es una lección aprendida.", i: "https://images.unsplash.com/photo-1456406644174-8ddd4cd52a06?auto=format&fit=crop&w=500&q=60" }
+    ];
+
+    let questions = db.sort(() => Math.random() - 0.5).slice(0, TOTAL_QUESTIONS);
+    
+    let currentIdx = 0;
+    let score = 0;
+    let userAns = [];
+    let timerInterval;
+    let timeLeft = TIME_PER_QUESTION;
+    let startTime;
+    let lifelines = { fifty: 3, time: 4, skip: 1 };
+    
+    const timerDisplay = document.getElementById('timer');
+    const startScreen = document.getElementById('startScreen');
+    const gameScreen = document.getElementById('gameScreen');
+    const resultScreen = document.getElementById('resultScreen');
+
+    window.onload = function() {
+        if(localStorage.getItem('noa_exam_marketing_embudo_final')) {
+            const data = JSON.parse(localStorage.getItem('noa_exam_marketing_embudo_final'));
+            showResults(data.score, data.userAns, true);
+        }
+    };
+
+    function startQuiz() {
+        startScreen.classList.remove('active');
+        gameScreen.classList.add('active');
+        document.getElementById('timerBadge').style.display = 'flex';
+        document.getElementById('finishBtn').style.display = 'block';
+        startTime = new Date();
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        const q = questions[currentIdx];
+        document.getElementById('qCount').innerText = `${currentIdx + 1}/${TOTAL_QUESTIONS}`;
+        document.getElementById('sCount').innerText = `Aciertos: ${score}`;
+        document.getElementById('progressBar').style.width = `${(currentIdx/TOTAL_QUESTIONS)*100}%`;
+        
+        document.getElementById('qText').innerText = q.q;
+        document.getElementById('qImage').innerHTML = `<i class="fas ${q.i}"></i>`;
+        
+        const cont = document.getElementById('optContainer');
+        cont.innerHTML = '';
+        q.o.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => answer(i, btn);
+            cont.appendChild(btn);
+        });
+
+        updateLifelines();
+        resetTimer();
+    }
+
+    function resetTimer() {
+        clearInterval(timerInterval);
+        timeLeft = TIME_PER_QUESTION;
+        timerDisplay.innerText = timeLeft;
+        timerDisplay.parentElement.style.background = 'white';
+        timerDisplay.parentElement.style.color = 'var(--primary-color)';
+
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            timerDisplay.innerText = timeLeft;
+            if(timeLeft <= 5) {
+                timerDisplay.parentElement.style.background = '#c0392b';
+                timerDisplay.parentElement.style.color = 'white';
+            }
+            if(timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timeOver();
+            }
+        }, 1000);
+    }
+
+    function timeOver() {
+        const q = questions[currentIdx];
+        recordAnswer(q.q, "Tiempo Agotado", q.o[q.a], false);
+        feedback(false, "¡Tiempo Agotado!", q.e, "fa-hourglass-end");
+    }
+
+    function answer(idx, btn) {
+        clearInterval(timerInterval);
+        const q = questions[currentIdx];
+        const isCorrect = (idx === q.a);
+        
+        const btns = document.querySelectorAll('.option-btn');
+        btns.forEach(b => b.disabled = true);
+
+        if(isCorrect) { btn.classList.add('correct'); score++; }
+        else { btn.classList.add('incorrect'); btns[q.a].classList.add('correct'); }
+
+        recordAnswer(q.q, q.o[idx], q.o[q.a], isCorrect);
+        feedback(isCorrect, isCorrect ? "¡Correcto!" : "Incorrecto", q.e, isCorrect ? "fa-check" : "fa-times");
+    }
+
+    function recordAnswer(q, u, c, ok) { userAns.push({q, u, c, ok}); }
+
+    function feedback(ok, title, exp, icon) {
+        const overlay = document.getElementById('feedbackOverlay');
+        document.getElementById('fbTitle').innerText = title;
+        document.getElementById('fbTitle').style.color = ok ? '#2ecc71' : '#e74c3c';
+        document.getElementById('fbIcon').innerHTML = `<i class="fas ${icon}" style="color:${ok ? '#2ecc71' : '#e74c3c'}"></i>`;
+        document.getElementById('fbText').innerHTML = `<strong>Explicación:</strong> ${exp}`;
+        
+        overlay.style.display = 'flex';
+        document.getElementById('nextBtn').onclick = () => {
+            overlay.style.display = 'none';
+            checkMotivation();
+        };
+    }
+
+    function checkMotivation() {
+        if (currentIdx > 0 && (currentIdx + 1) % 5 === 0 && currentIdx < (TOTAL_QUESTIONS - 1)) {
+            showMotivation();
+        } else {
+            nextQ();
+        }
+    }
+
+    function showMotivation() {
+        const overlay = document.getElementById('motivationOverlay');
+        const randomMot = motivations[Math.floor(Math.random() * motivations.length)];
+        document.getElementById('motImg').src = randomMot.i;
+        document.getElementById('motQuote').innerText = `"${randomMot.t}"`;
+        overlay.style.display = 'flex';
+    }
+
+    function closeMotivation() {
+        document.getElementById('motivationOverlay').style.display = 'none';
+        nextQ();
+    }
+
+    function nextQ() {
+        currentIdx++;
+        if(currentIdx < TOTAL_QUESTIONS) loadQuestion();
+        else finish();
+    }
+
+    function updateLifelines() {
+        document.getElementById('c50').innerText = lifelines.fifty;
+        document.getElementById('cTime').innerText = lifelines.time;
+        document.getElementById('cSkip').innerText = lifelines.skip;
+        document.getElementById('btnFifty').disabled = lifelines.fifty <= 0;
+        document.getElementById('btnTime').disabled = lifelines.time <= 0;
+        document.getElementById('btnSkip').disabled = lifelines.skip <= 0;
+    }
+    
+    function useFifty() {
+        if(lifelines.fifty <= 0) return;
+        const q = questions[currentIdx];
+        const btns = Array.from(document.querySelectorAll('.option-btn'));
+        let wrongs = btns.map((_, i) => i).filter(i => i !== q.a);
+        wrongs.sort(() => Math.random() - 0.5).slice(0, 2).forEach(i => btns[i].classList.add('hidden'));
+        lifelines.fifty--; updateLifelines();
+    }
+    
+    function useTime() {
+        if(lifelines.time <= 0) return;
+        timeLeft += 15; timerDisplay.innerText = timeLeft;
+        timerDisplay.parentElement.style.background = '#27ae60';
+        lifelines.time--; updateLifelines();
+    }
+    
+    function useSkip() {
+        if(lifelines.skip <= 0) return;
+        clearInterval(timerInterval);
+        const q = questions[currentIdx];
+        score++;
+        recordAnswer(q.q, "COMODÍN SKIP", q.o[q.a], true);
+        lifelines.skip--; updateLifelines();
+        feedback(true, "¡Pregunta Regalada!", "Usaste tu comodín.", "fa-gift");
+    }
+
+    function confirmFinish() {
+        if(confirm("¿Terminar ahora? Se enviará tu nota actual.")) {
+            clearInterval(timerInterval);
+            finish();
+        }
+    }
+
+    function finish() {
+        const examData = { score: score, userAns: userAns, date: new Date().toISOString() };
+        localStorage.setItem('noa_exam_marketing_embudo_final', JSON.stringify(examData));
+        showResults(score, userAns, false);
+    }
+
+    function showResults(finalScore, answers, isRevisit) {
+        startScreen.classList.remove('active');
+        gameScreen.classList.remove('active');
+        resultScreen.classList.add('active');
+        document.getElementById('timerBadge').style.display = 'none';
+        document.getElementById('finishBtn').style.display = 'none';
+
+        if(isRevisit) {
+            document.getElementById('cheatAlert').style.display = 'block';
+            document.getElementById('whatsappBtn').innerText = "REENVIAR RESULTADO (Copia)";
+        }
+
+        document.getElementById('finalScore').innerText = `${finalScore}/${TOTAL_QUESTIONS}`;
+        const rankEl = document.getElementById('rankBadge');
+        if(finalScore >= 54) { rankEl.innerText = "MASTER"; rankEl.style.background = "#27ae60"; }
+        else if(finalScore >= PASS_SCORE) { rankEl.innerText = "APROBADO"; rankEl.style.background = "#f39c12"; }
+        else { rankEl.innerText = "REPROBADO"; rankEl.style.background = "#c0392b"; }
+        
+        document.getElementById('motivationalMsg').innerText = finalScore >= PASS_SCORE ? "¡Felicidades por completar el examen!" : "Necesitas reforzar contenidos.";
+
+        const code = `NOA-${finalScore}-${Math.floor(Math.random()*9000)+1000}`;
+        document.getElementById('valCode').innerText = code;
+
+        const list = document.getElementById('reviewList');
+        list.innerHTML = '';
+        answers.forEach((a, i) => {
+            const div = document.createElement('div');
+            div.style.borderBottom = "1px solid #eee"; div.style.padding = "5px"; div.style.color = a.ok ? "green" : "red";
+            div.innerHTML = `<strong>${i+1}.</strong> ${a.ok ? '<i class="fas fa-check"></i>' : '<i class="fas fa-times"></i>'} ${a.q}`;
+            list.appendChild(div);
+        });
+    }
+
+    function validateAndSend() {
+        const name = document.getElementById('inputName').value.trim();
+        const dni = document.getElementById('inputDNI').value.trim();
+        const course = document.getElementById('inputCourse').value.trim();
+        const code = document.getElementById('valCode').innerText;
+
+        if(!name || !dni || !course) { alert("Por favor completa todos los datos."); return false; }
+        
+        const endTime = new Date();
+        const duration = startTime ? Math.round((endTime - startTime)/1000/60) + " min" : "Recarga";
+        const msg = `*EXAMEN NOA - MARKETING DIGITAL: EMBUDO DE VENTAS*%0A--------------------------%0A*Alumno:* ${name}%0A*DNI:* ${dni}%0A*Comisión:* ${course}%0A*Nota Final:* ${score}/${TOTAL_QUESTIONS}%0A*Código:* ${code}%0A*Tiempo:* ${duration}%0A--------------------------%0AEnvío verificado desde web.`;
+        
+        window.open(`https://wa.me/5493816490060?text=${msg}`, '_blank');
+    }
+</script>
+</body>
+</html>
